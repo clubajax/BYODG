@@ -15,6 +15,7 @@ define([
 		
 		render: function(data){
 			console.log('render!', data);
+			this.grid.render(data.items);
 		},
 		
 		loadData: function(callback){

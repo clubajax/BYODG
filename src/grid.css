@@ -1,0 +1,84 @@
+.base-grid{
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: auto;
+	width: auto;
+}
+.base-grid table{
+	border-collapse: collapse;
+}
+.base-grid-row:nth-child(even){
+	background: #F2F5F9;
+}
+.base-grid-row.selected,
+.base-grid-row.selected:nth-child(even){
+	background: #bfd6eb;
+}
+
+.base-grid-container{
+	height: auto;
+	width: auto;
+	position: absolute;
+	top:22px;
+	left:0;
+	right: 0;
+	bottom: 0;
+	overflow-y: hidden;
+	overflow-x: hidden;
+}
+.base-grid .base-grid-container{
+	overflow-y: scroll;
+	overflow-x: auto;
+	/* corrects alignment, and more importantly,
+	causes a resize to put the grid back on mouseout
+	TODO: better actual scroll widths per browser
+	right:2px;
+	*/
+	
+}
+.base-grid-header-wrap{
+	padding-right: 16px;
+	background: #eee;
+}
+.base-grid-header{
+	overflow: hidden;
+}
+
+.base-grid-header table{
+	
+}
+.base-grid .base-grid-header .last{
+	border-right-width: 0px;
+}
+
+.base-grid th{
+	text-align: left;
+	background: #eee;
+	padding: 3px;
+	font-weight: normal;
+	border: 1px solid #ddd;
+	border-bottom-width: 0;
+	white-space: nowrap;
+}
+.base-grid th:hover{
+	background: #DCEAEF;
+}
+.base-grid th.dummy:hover{
+	background: #eee;	
+}
+.base-grid th{
+	cursor: pointer;
+}
+
+.base-grid td{
+	padding: 3px;
+	border: 1px solid #ddd;
+	white-space: nowrap;
+}
+.base-grid th span{
+	vertical-align: bottom;
+}
