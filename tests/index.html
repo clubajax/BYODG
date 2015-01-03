@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>grid</title>
+	<script src='../../tools/requirejs.js'></script>
+	<script src='../../randomizer/rand.js'></script>
+	<script>
+		requirejs.config({
+			baseUrl:'.',
+			paths:{
+				grid:'../src',
+				declare: '../../declare/src/declare',
+				dom: '../../dom/src/dom'
+			}
+		});
+	</script>
+</head>
+<body>
+    <h1>grid</h1>
+	<div id='grid'></div>
+	<script>
+		require(['./TestGrid'], function(TestGrid){
+			new TestGrid('grid');
+		});
+	</script>
+</body>
+</html>
