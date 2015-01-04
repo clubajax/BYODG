@@ -18,7 +18,6 @@
 .base-grid-row.selected:nth-child(even){
 	background: #bfd6eb;
 }
-
 .base-grid-container{
 	height: auto;
 	width: auto;
@@ -37,14 +36,6 @@
 .base-grid-header{
 	overflow: hidden;
 }
-
-.base-grid-header table{
-	
-}
-.base-grid .base-grid-header .last{
-	border-right-width: 0px;
-}
-
 .base-grid th{
 	text-align: left;
 	background: #eee;
@@ -57,13 +48,9 @@
 .base-grid th:hover{
 	background: #DCEAEF;
 }
-.base-grid th.dummy:hover{
-	background: #eee;	
-}
 .base-grid th{
 	cursor: pointer;
 }
-
 .base-grid td{
 	padding: 3px;
 	border: 1px solid #ddd;
