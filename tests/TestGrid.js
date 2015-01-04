@@ -34,7 +34,7 @@ define([
 			url += params.join('&');
 			
 			xhr(url, function(data){
-				console.table(data.items);
+				//console.table(data.items);
 				callback(data);
 			}, function(error){
 				console.error('error', error);
@@ -43,12 +43,22 @@ define([
 		
 		buildGrid: function(nodeId){
 			this.grid = new Grid(nodeId);
+			
+			// pass-through events
 			this.grid.on('data', function(data){
 				this.emit('data', data);
 			}, this);
 			this.grid.on('render', function(grid){
 				this.emit('render', grid);
 			}, this);
+			this.grid.on('select-row', function(event){
+				this.emit('select-row', event);
+			}, this);
+			this.grid.on('header-click', function(event){
+				this.emit('header-click', event);
+			}, this);
+			
+			
 		}
 	});
 	

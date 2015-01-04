@@ -13,12 +13,6 @@ define([
 		headerWrapClass:'base-grid-header-wrap',
 		headerClass:'base-grid-header',
 		containerClass:'base-grid-container',
-		scrollerClass:'base-grid-scroller',
-		
-		templateString:'<div class="${baseClass}"><div class="base-grid-header-wrap"><div data-dojo-attach-point="header" class="${headerClass}"></div></div><div data-dojo-attach-point="container" class="${containerClass}"><div data-dojo-attach-point="scroller" class="${scrollerClass}"></div></div></div>',
-		rowLabelValueTemplate:'<div class="base-list-pair"><div class="base-list-label">{LABEL}</div><div class="base-list-text">{TEXT}</div></div>',
-		rowLabelTemplate:'<div class="base-list-pair"><div class="base-list-label">{LABEL}</div></div>',
-		rowValueTemplate:'<div class="base-list-pair"><div class="base-list-text">{TEXT}</div></div>',
 		
 		constructor: function(nodeId){
 			this.build(nodeId);
@@ -31,7 +25,7 @@ define([
 				tr = dom('tr', {}, table);
 				
 			columns.forEach(function(col){
-				dom('th', {html: col}, tr);
+				dom('th', {html: col, attr:{'data-field': col}}, tr);
 			});
 		},
 		
@@ -40,20 +34,24 @@ define([
 			var
 				table = dom('table', {}, this.container);
 				
-			items.forEach(function(item){
-				var tr = dom('tr', {}, table);
+			items.forEach(function(item, i){
+				var tr = dom('tr', {attr:{'data-index': i}}, table);
 				Object.keys(item).forEach(function(key){
-					dom('td', {html: item[key]}, tr);
+					dom('td', {html: item[key], attr:{'data-item-field': key}}, tr);
 				});
 			});
+			
+			this.table = table;
 		},
 		
 		render: function(items){
+			this.items = items;
 			this.emit('data', items);
 			var columns = Object.keys(items[0]);
 			this.renderHeader(columns);
 			this.renderBody(items);
 			this.setColumnWidths();
+			this.connectClicks();
 			this.emit('render', this);
 		},
 		
@@ -63,6 +61,73 @@ define([
 				dom('div', {css:this.headerWrapClass}, this.node));
 			this.container = dom('div', {css:this.containerClass}, this.node);
 			this.connectScroll();
+		},
+		
+		select: function(index, cell){
+			if(typeof index !== 'number'){
+				console.warn('Failed to select numeric row index of', index);
+				return;
+			}
+			if(!this.table){
+				console.warn('Table not ready to select row');
+				return;
+			}
+			var
+				row = this.table.rows[index],
+				item = this.items[index],
+				event = {
+					item:item,
+					index: index,
+					row: row
+				};
+			if(cell){
+				event.cell = cell;
+				event.field = cell.getAttribute('data-field');
+			}
+			
+			if(this.currentRow){
+				dom.classList.remove(this.currentRow, 'selected');
+			}
+			
+			this.currentRow = row;
+			dom.classList.add(this.currentRow, 'selected');
+			
+			this.emit('select-row', event);
+		},
+		
+		onRowClick: function(event){
+			var
+				index,
+				cell = on.ancestor(event.target, 'TD'),
+				row = on.ancestor(event.target, 'TR');
+			if(!row){ return; }
+			
+			index = +(row.getAttribute('data-index'));
+			
+			this.select(index, cell);
+		},
+		
+		onHeaderClick: function(event){
+			var
+				cell = on.ancestor(event.target, 'TH'),
+				field = cell.getAttribute('data-field'),
+				emitEvent = {
+					field: field,
+					cell: cell
+				};
+			
+			this.emit('header-click', emitEvent);
+		},
+		
+		connectClicks: function(){
+			if(this.clickHandles){
+				this.clickHandles.forEach(function(h){ h.remove(); });
+			}
+			
+			this.clickHandles = [
+				on(this.header, 'click', this.onHeaderClick, this),
+				on(this.container, 'click', this.onRowClick, this)
+			];
 		},
 		
 		connectScroll: function(){
