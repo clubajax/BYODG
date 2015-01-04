@@ -1,12 +1,5 @@
 .base-grid{
-	overflow: hidden;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	height: auto;
-	width: auto;
+
 }
 .base-grid table{
 	border-collapse: collapse;
@@ -20,25 +13,7 @@
 }
 
 .base-grid-container{
-	height: auto;
-	width: auto;
-	position: absolute;
-	top:22px;
-	left:0;
-	right: 0;
-	bottom: 0;
-	overflow-y: hidden;
-	overflow-x: hidden;
-}
-.base-grid .base-grid-container{
-	overflow-y: scroll;
-	overflow-x: auto;
-	/* corrects alignment, and more importantly,
-	causes a resize to put the grid back on mouseout
-	TODO: better actual scroll widths per browser
-	right:2px;
-	*/
-	
+
 }
 .base-grid-header-wrap{
 	padding-right: 16px;
