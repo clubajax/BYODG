@@ -73,7 +73,7 @@ define([
 		
 		setColumnWidths: function(){
 			var
-				i, thw, tdw,
+				i, minWidth, thw, tdw,
 				container = this.container,
 				header = this.header,
 				headerTable = header.querySelector('table'),
@@ -101,10 +101,10 @@ define([
 			dom.style(containerTable, 'width', 'auto');
 			// reset header THs
 			for(i = 0; i < ths.length; i++){
-				dom.style(ths[i], {width:''});
+				dom.style(ths[i], {width:'', minWidth:''});
 				// TDs shouldn't have a width yet,
 				// unless this is a resize
-				dom.style(tds[i], {width:''});
+				dom.style(tds[i], {width:'', minWidth:''});
 			}
 			
 			// wait for DOM to render before getting sizes
@@ -114,8 +114,9 @@ define([
 					if(ths[i].className !== 'dummy'){
 						thw = dom.box(ths[i]).width;
 						tdw = dom.box(tds[i]).width;
-						dom.style(ths[i], {width:colPercent});
-						dom.style(tds[i], {width:colPercent});
+						minWidth = Math.max(thw, tdw);
+						dom.style(ths[i], {width:colPercent, minWidth:minWidth});
+						dom.style(tds[i], {width:colPercent, minWidth:minWidth});
 					}
 				}
 				// remove temp container styles
