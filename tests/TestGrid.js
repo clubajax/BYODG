@@ -20,6 +20,10 @@ define([
 		
 		loadData: function(callback){
 			xhr('http://0.0.0.0:3000/?start=10&count=20&sort=index&dir=desc', function(data){
+				//data.items = data.items.map(function(item){
+				//	delete item.index;
+				//	return item;
+				//});
 				console.table(data.items);
 				callback(data);
 			}, function(error){

@@ -1,7 +1,8 @@
 define([
 	'declare',
-	'dom'
-], function(declare, dom){
+	'dom',
+	'on'
+], function(declare, dom, on){
 	
 	return declare({
 		declaredClass: 'grid',
@@ -51,6 +52,7 @@ define([
 			var columns = Object.keys(items[0]);
 			this.renderHeader(columns);
 			this.renderBody(items);
+			this.setColumnWidths();
 		},
 		
 		build: function(nodeId){
@@ -58,7 +60,77 @@ define([
 			this.header = dom('div', {css:this.headerClass},
 				dom('div', {css:this.headerWrapClass}, this.node));
 			this.container = dom('div', {css:this.containerClass}, this.node);
+			this.connectScroll();
 			
+		},
+		
+		connectScroll: function(){
+			var self = this;
+			this.scrollHandle = on(this.container, 'scroll', function(event){
+				self.header.scrollLeft = event.target.scrollLeft;
+			});
+		},
+		
+		setColumnWidths: function(){
+			var
+				i, thw, tdw,
+				container = this.container,
+				header = this.header,
+				headerTable = header.querySelector('table'),
+				ths = headerTable.querySelectorAll('th'),
+				colPercent = (100 / ths.length) + '%',
+				containerTable = container.querySelector('table'),
+				tds = containerTable.querySelector('tr').querySelectorAll('td');
+				window.table = containerTable;
+				
+			
+			// reset
+			//
+			// set containers to absolute and an arbitrary, small width
+			// to force cells to squeeze together so we can measure their
+			// natural widths
+			dom.style(header, {
+				position:'absolute',
+				width:100
+			});
+			dom.style(container, {
+				position:'absolute',
+				width:100
+			});
+			dom.style(headerTable, 'width', 'auto');
+			dom.style(containerTable, 'width', 'auto');
+			// reset header THs
+			for(i = 0; i < ths.length; i++){
+				dom.style(ths[i], {width:''});
+				// TDs shouldn't have a width yet,
+				// unless this is a resize
+				dom.style(tds[i], {width:''});
+			}
+			
+			// wait for DOM to render before getting sizes
+			window.requestAnimationFrame(function(){
+				// after the next 
+				for(i = 0; i < ths.length; i++){
+					if(ths[i].className !== 'dummy'){
+						thw = dom.box(ths[i]).width;
+						tdw = dom.box(tds[i]).width;
+						dom.style(ths[i], {width:colPercent});
+						dom.style(tds[i], {width:colPercent});
+					}
+				}
+				// remove temp container styles
+				dom.style(header, {
+					position:'',
+					width:''
+				});
+				dom.style(container, {
+					position:'',
+					width:''
+				});
+				// replace table widths
+				dom.style(headerTable, 'width', '100%');
+				dom.style(containerTable, 'width', '100%');
+			});	
 		}
 	});
 
