@@ -1,10 +1,11 @@
 define([
 	'declare',
+	'EventTree',
 	'grid/xhr',
 	'grid/Grid'
-], function(declare, xhr, Grid){
+], function(declare, EventTree, xhr, Grid){
 	
-	return declare({
+	return declare(EventTree, {
 		declaredClass:'TestGrid',
 		constructor: function(options, nodeId){
 			this.buildGrid(nodeId);
@@ -42,6 +43,12 @@ define([
 		
 		buildGrid: function(nodeId){
 			this.grid = new Grid(nodeId);
+			this.grid.on('data', function(data){
+				this.emit('data', data);
+			}, this);
+			this.grid.on('render', function(grid){
+				this.emit('render', grid);
+			}, this);
 		}
 	});
 	

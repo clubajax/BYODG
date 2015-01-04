@@ -1,10 +1,11 @@
 define([
 	'declare',
 	'dom',
-	'on'
-], function(declare, dom, on){
+	'on',
+	'EventTree'
+], function(declare, dom, on, EventTree){
 	
-	return declare({
+	return declare(EventTree, {
 		declaredClass: 'grid',
 		
 		baseClass:'base-grid',
@@ -20,7 +21,6 @@ define([
 		rowValueTemplate:'<div class="base-list-pair"><div class="base-list-text">{TEXT}</div></div>',
 		
 		constructor: function(nodeId){
-			console.log('GRID!');
 			this.build(nodeId);
 		},
 		
@@ -49,10 +49,12 @@ define([
 		},
 		
 		render: function(items){
+			this.emit('data', items);
 			var columns = Object.keys(items[0]);
 			this.renderHeader(columns);
 			this.renderBody(items);
 			this.setColumnWidths();
+			this.emit('render', this);
 		},
 		
 		build: function(nodeId){
@@ -61,7 +63,6 @@ define([
 				dom('div', {css:this.headerWrapClass}, this.node));
 			this.container = dom('div', {css:this.containerClass}, this.node);
 			this.connectScroll();
-			
 		},
 		
 		connectScroll: function(){
