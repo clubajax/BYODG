@@ -2,20 +2,31 @@ define([
 	'declare',
 	'EventTree',
 	'grid/xhr',
-	'grid/Grid'
-], function(declare, EventTree, xhr, Grid){
+	'grid/Grid',
+	'grid/Sort'
+], function(declare, EventTree, xhr, Grid, Sort){
 	
 	return declare(EventTree, {
 		declaredClass:'TestGrid',
 		constructor: function(options, nodeId){
 			this.buildGrid(nodeId);
+			this.sorter = new Sort({grid: this.grid});
+			
+			this.sorter.on('sort', function(event){
+				Object.keys(event).forEach(function(key){
+					options[key] = event[key];
+				});
+				this.loadData(options, function(data){
+					this.render(data);
+				}.bind(this));
+			}, this);
+			
 			this.loadData(options, function(data){
 				this.render(data);
 			}.bind(this));
 		},
 		
 		render: function(data){
-			console.log('render!', data);
 			this.grid.render(data.items);
 		},
 		

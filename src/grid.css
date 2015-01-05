@@ -44,7 +44,25 @@
 	font-weight: normal;
 	border: 1px solid #ddd;
 	border-bottom-width: 0;
+}
+.base-grid th span{
 	white-space: nowrap;
+	padding-right: 12px;
+	position: relative;
+}
+.base-grid th.desc span:after{
+	content: '\25BC';
+	position: absolute;
+	right: -6px;
+	top: 4px;
+	font-size: 10px;
+}
+.base-grid th.asc span:after{
+	content: '\25B2';
+	position: absolute;
+	right: -6px;
+	top: 4px;
+	font-size: 10px;
 }
 .base-grid th:hover{
 	background: #DCEAEF;

@@ -26,29 +26,34 @@ define([
 				node = nodeOrField;
 				field = node.getAttribute('data-field');
 			}
-			if(this.currentCell){
+			if(this.currentCell && this.currentDir){
 				dom.classList.remove(this.currentCell, this.currentDir);	
 			}
 			
 			this.currentDir = dir || '';
 			this.currentCell = node;
-			dom.classList.add(this.currentCell, this.currentDir);
-			console.log('sort:', dir, this.currentDir, this.currentCell);
+			this.currentField = field;
+			this.grid.once('render', function(){
+				this.currentCell = this.getNodeByField(dom.attr(this.currentCell, 'data-field'));
+				dom.classList.add(this.currentCell, this.currentDir);
+			}, this);
+			
+			
 			this.emit('sort', {
 				dir: this.currentDir,
-				field: this.currentDir ? field : ''
+				sort: this.currentDir ? field : ''
 			});
 		},
 				
 		onHeaderClick: function(event){
 			var
 				sort = 'desc',
+				field = event.field,
 				target = event.cell;
 			if(!target){
 				return;
 			}
-			
-			if(target === this.currentCell){
+			if(field === this.currentField){
 				if(this.currentDir === 'desc'){
 					sort = 'asc';
 				}
@@ -63,9 +68,7 @@ define([
 		},
 		
 		getNodeByField: function(field){
-			if(!this.cells){
-				this.cells = this.getHeaderCells();
-			}
+			this.cells = this.getHeaderCells();
 			return this.cells.map[field];
 		},
 		

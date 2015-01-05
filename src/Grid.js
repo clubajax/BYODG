@@ -19,18 +19,18 @@ define([
 		},
 		
 		renderHeader: function(columns){
-			dom.clean(this.header);
+			dom.clean(this.header, true);
 			var
 				table = dom('table', {}, this.header),
 				tr = dom('tr', {}, table);
 				
 			columns.forEach(function(col){
-				dom('th', {html: col, attr:{'data-field': col}}, tr);
+				dom('th', {html: '<span>'+col+'</span>', attr:{'data-field': col}}, tr);
 			});
 		},
 		
 		renderBody: function(items){
-			dom.clean(this.container);
+			dom.clean(this.container, true);
 			var
 				table = dom('table', {}, this.container);
 				
