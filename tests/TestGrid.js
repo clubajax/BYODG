@@ -6,15 +6,22 @@ define([
 	'grid/Grid',
 	'grid/Sort',
 	'grid/Paginator',
-	'grid/Editable'
-], function(declare, dom, EventTree, xhr, Grid, Sort, Paginator, Editable){
+	'grid/Editable',
+	'grid/ColumnSizer',
+	'grid/ClickHandler',
+	'grid/Selection'
+], function(declare, dom, EventTree, xhr, Grid, Sort, Paginator, Editable, ColumnSizer, ClickHandler, Selection){
 	
 	return declare(EventTree, {
 		declaredClass:'TestGrid',
 		constructor: function(options, nodeId){
 			this.buildGrid(nodeId);
-			this.sorter = new Sort({grid: this.grid});
 			
+			this.clickHandler = new ClickHandler({grid: this.grid});
+			
+			this.selection = new Selection({clickHandler: this.clickHandler, grid: this.grid});
+			
+			this.sorter = new Sort({grid: this.grid, clickHandler: this.clickHandler});
 			this.sorter.on('sort', function(event){
 				Object.keys(event).forEach(function(key){ options[key] = event[key]; });
 				this.loadData(options);
@@ -28,10 +35,17 @@ define([
 				this.loadData(options);
 			}, this);
 			
-			this.editable = new Editable({grid:this.grid});
+			
+			
+			this.editable = new Editable({clickHandler:this.clickHandler});
 			this.editable.on('change', function(event){
 				console.log('CHANGED', event);
 			});
+			
+			new ColumnSizer({grid:this.grid});
+			
+			this.connectEvents();
+			
 			this.loadData(options);
 		},
 		
@@ -68,7 +82,9 @@ define([
 		
 		buildGrid: function(nodeId){
 			this.grid = new Grid(nodeId);
-			
+		},
+		
+		connectEvents: function(){
 			// pass-through events
 			this.grid.on('data', function(data){
 				this.emit('data', data);
@@ -76,14 +92,12 @@ define([
 			this.grid.on('render', function(grid){
 				this.emit('render', grid);
 			}, this);
-			this.grid.on('select-row', function(event){
+			this.selection.on('select-row', function(event){
 				this.emit('select-row', event);
 			}, this);
-			this.grid.on('header-click', function(event){
+			this.clickHandler.on('header-click', function(event){
 				this.emit('header-click', event);
 			}, this);
-			
-			
 		}
 	});
 	

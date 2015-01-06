@@ -8,8 +8,8 @@ define([
 	return declare(EventTree, {
 		declaredClass: 'Editable',
 		constructor: function(options){
-			this.grid = options.grid;
-			this.grid.on('edit', this.edit, this);
+			this.clickHandler = options.clickHandler;
+			this.clickHandler.on('edit', this.edit, this);
 		},
 		
 		edit: function(event){

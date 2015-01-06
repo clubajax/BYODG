@@ -9,7 +9,9 @@ define([
 		
 		constructor: function(options){
 			this.grid = options.grid;
-			this.renderHandle = this.grid.on('header-click', this.onHeaderClick, this);
+			this.clickHandler = options.clickHandler;
+			
+			this.renderHandle = this.clickHandler.on('header-click', this.onHeaderClick, this);
 			if(options.sortProps){
 				this.setSort(options.sortProps.column, options.sortProps.dir);
 			}
