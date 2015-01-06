@@ -74,6 +74,7 @@
 	padding: 3px;
 	border: 1px solid #ddd;
 	white-space: nowrap;
+	position: relative;
 }
 .base-grid th span{
 	vertical-align: bottom;
@@ -210,4 +211,20 @@
 }
 .paginator .icon-add:hover{
 	opacity: 1;
+}
+
+.editable,
+.editable input{
+	position: absolute;
+	top:0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: auto;
+	height: auto;
+}
+.editable input{
+	width: 100%;
+	border: 0;
+	background: #fff;
 }

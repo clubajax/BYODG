@@ -5,8 +5,9 @@ define([
 	'grid/xhr',
 	'grid/Grid',
 	'grid/Sort',
-	'grid/Paginator'
-], function(declare, dom, EventTree, xhr, Grid, Sort, Paginator){
+	'grid/Paginator',
+	'grid/Editable'
+], function(declare, dom, EventTree, xhr, Grid, Sort, Paginator, Editable){
 	
 	return declare(EventTree, {
 		declaredClass:'TestGrid',
@@ -27,6 +28,10 @@ define([
 				this.loadData(options);
 			}, this);
 			
+			this.editable = new Editable({grid:this.grid});
+			this.editable.on('change', function(event){
+				console.log('CHANGED', event);
+			});
 			this.loadData(options);
 		},
 		

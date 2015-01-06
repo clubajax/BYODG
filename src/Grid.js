@@ -37,7 +37,7 @@ define([
 			items.forEach(function(item, i){
 				var tr = dom('tr', {attr:{'data-index': i}}, table);
 				Object.keys(item).forEach(function(key){
-					dom('td', {html: item[key], attr:{'data-item-field': key}}, tr);
+					dom('td', {html: item[key], attr:{'data-field': key}}, tr);
 				});
 			});
 			
@@ -119,6 +119,30 @@ define([
 			this.emit('header-click', emitEvent);
 		},
 		
+		onDoubleClick: function(event){
+			var
+				index,
+				emitEvent,
+				item,
+				cell = on.ancestor(event.target, 'TD'),
+				field = cell.getAttribute('data-field'),
+				row = on.ancestor(event.target, 'TR');
+			if(!row){ return; }
+			
+			index = +(row.getAttribute('data-index'));
+			item = this.items[index];
+			
+			emitEvent = {
+				cell: cell,
+				item: item,
+				field: field,
+				value: item[field],
+				row: row,
+			};
+			
+			this.emit('double-click', emitEvent);
+		},
+		
 		connectClicks: function(){
 			if(this.clickHandles){
 				this.clickHandles.forEach(function(h){ h.remove(); });
@@ -126,7 +150,8 @@ define([
 			
 			this.clickHandles = [
 				on(this.header, 'click', this.onHeaderClick, this),
-				on(this.container, 'click', this.onRowClick, this)
+				on(this.container, 'click', this.onRowClick, this),
+				on(this.container, 'dblclick', this.onDoubleClick, this)
 			];
 		},
 		
