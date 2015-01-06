@@ -9,7 +9,7 @@ define([
 		declaredClass: 'Editable',
 		constructor: function(options){
 			this.grid = options.grid;
-			this.grid.on('double-click', this.edit, this);
+			this.grid.on('edit', this.edit, this);
 		},
 		
 		edit: function(event){

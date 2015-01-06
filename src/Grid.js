@@ -37,7 +37,7 @@ define([
 			items.forEach(function(item, i){
 				var tr = dom('tr', {attr:{'data-index': i}}, table);
 				Object.keys(item).forEach(function(key){
-					dom('td', {html: item[key], attr:{'data-field': key}}, tr);
+					dom('td', {html: item[key], attr:{'data-field': key, tabIndex: 1}}, tr);
 				});
 			});
 			
@@ -140,7 +140,13 @@ define([
 				row: row,
 			};
 			
-			this.emit('double-click', emitEvent);
+			this.emit('edit', emitEvent);
+		},
+		
+		onKey: function(event){
+			if(event.keyCode === 13){
+				this.onDoubleClick(event);
+			}
 		},
 		
 		connectClicks: function(){
@@ -151,7 +157,8 @@ define([
 			this.clickHandles = [
 				on(this.header, 'click', this.onHeaderClick, this),
 				on(this.container, 'click', this.onRowClick, this),
-				on(this.container, 'dblclick', this.onDoubleClick, this)
+				on(this.container, 'dblclick', this.onDoubleClick, this),
+				on(this.container, 'keyup', this.onKey, this)
 			];
 		},
 		
