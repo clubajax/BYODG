@@ -78,3 +78,136 @@
 .base-grid th span{
 	vertical-align: bottom;
 }
+
+
+
+.has-paginator .base-grid{
+	bottom: 25px;
+}
+.paginator{
+	position: absolute;
+	bottom: 0;
+	width: auto;
+	left: 1px;
+	right: 1px;
+	border: 1px solid #ccc;
+	background: #eee;
+}
+
+.paginator-total{
+	padding: 3px 0 3px 3px;
+}
+.paginator-incrementor{
+	position: absolute;
+	top:3px;
+	right: 15px;
+	padding-right: 5px;
+	text-align: right;
+	background: #eee;
+}
+.paginator-step{
+	padding: 1px 3px;
+	cursor: pointer;
+}
+
+.paginator-step:hover{
+	background-color: #C2E4E8;
+}
+
+.paginator-step.nav{
+	display: inline-block;
+	width: 6px;
+	height: 10px;
+	background-image: url(images/tiny-icons-dark.png);
+	background-repeat: no-repeat;
+	opacity: 0.5;
+	cursor: pointer;
+}
+.paginator-step.nav:hover{
+	opacity: 1;
+}
+.paginator-step.disabled,
+.paginator-step.disabled:hover{
+	cursor: default;
+	color: #ccc;
+	background-color: transparent;
+}
+.paginator-step.nav.disabled,
+.paginator-step.nav.disabled:hover{
+	cursor: default;
+	background-color: transparent;
+	opacity: 0.2;
+}
+
+.paginator-step.first{
+	background-position: -179px -1px;
+}
+.paginator-step.last{
+	background-position: -163px -1px;
+}
+.paginator-step.next{
+	background-position: -35px -1px;
+}
+.paginator-step.prev{
+	background-position: -99px -1px;
+}
+
+/* popup menu */
+.menu{
+	position: absolute;
+	top:20px;	
+	right: 0;
+	border: 1px solid #999;
+	background: #fff;
+	padding: 5px;
+	z-index: 1;
+}
+.paginator .menu,
+.paginator .base-menu{
+	top: auto;
+	bottom: 20px;
+}
+
+.menu-item{
+	padding: 3px;
+	cursor: pointer;
+}
+.menu-item input{
+	margin-right: 5px;
+}
+.menu-item:hover{
+	background: #C2E4E8; 
+}
+.menu-item.checked,
+.menu-item.checked:hover{
+	background: none;
+	cursor: default;
+}
+
+.menu-item .checkbox{
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	margin-right: 5px;
+	vertical-align: text-top;
+}
+.menu-item.checked .checkbox{
+	background: url(images/tiny-icons-dark.png) no-repeat -63px -146px;	
+}
+.menu-item .label{
+	display: inline-block;
+	vertical-align: text-top;
+}
+.menu-divider{
+	margin: 10px 3px;
+	border-bottom: 1px solid #ccc;
+}
+.paginator .icon-add{
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	opacity:0.4;
+}
+.paginator .icon-add:hover{
+	opacity: 1;
+}

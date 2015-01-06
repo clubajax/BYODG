@@ -1,10 +1,12 @@
 define([
 	'declare',
+	'dom',
 	'EventTree',
 	'grid/xhr',
 	'grid/Grid',
-	'grid/Sort'
-], function(declare, EventTree, xhr, Grid, Sort){
+	'grid/Sort',
+	'grid/Paginator'
+], function(declare, dom, EventTree, xhr, Grid, Sort, Paginator){
 	
 	return declare(EventTree, {
 		declaredClass:'TestGrid',
@@ -13,24 +15,31 @@ define([
 			this.sorter = new Sort({grid: this.grid});
 			
 			this.sorter.on('sort', function(event){
-				Object.keys(event).forEach(function(key){
-					options[key] = event[key];
-				});
-				this.loadData(options, function(data){
-					this.render(data);
-				}.bind(this));
+				Object.keys(event).forEach(function(key){ options[key] = event[key]; });
+				this.loadData(options);
 			}, this);
 			
-			this.loadData(options, function(data){
-				this.render(data);
-			}.bind(this));
+			dom.classList.add(dom.byId(nodeId), 'has-paginator');
+			this.paginator = new Paginator({}, dom.byId(nodeId));
+			
+			this.paginator.on('change', function(event){
+				Object.keys(event).forEach(function(key){ options[key] = event[key]; });
+				this.loadData(options);
+			}, this);
+			
+			this.loadData(options);
 		},
 		
 		render: function(data){
 			this.grid.render(data.items);
 		},
 		
-		loadData: function(options, callback){
+		onData: function(data){
+			this.render(data);
+			this.paginator.update(data);
+		},
+		
+		loadData: function(options){
 			var
 				url = 'http://0.0.0.0:3000/?',
 				params = [];
@@ -46,8 +55,8 @@ define([
 			
 			xhr(url, function(data){
 				//console.table(data.items);
-				callback(data);
-			}, function(error){
+				this.onData(data);
+			}.bind(this), function(error){
 				console.error('error', error);
 			});		
 		},
