@@ -1,0 +1,20 @@
+{
+	"author": "Mike Wilcox @clubajax",
+	"name": "BYODG",
+	"main":"tests/TestGrid.js",
+	"description": "BYODG is a project that demonstrates how to build your own grid instead of relying on one from a library.",
+	"version": "0.0.1",
+	"license": "Unlicense",
+    "readmeFilename": "README.md",
+	"dependencies":{
+		"EventTree": "git://github.com/clubajax/EventTree.git",
+		"dom": "git://github.com/clubajax/dom.git",
+		"on": "git://github.com/clubajax/on.git",
+		"declare": "git://github.com/clubajax/declare.git",
+		"requirejs": "latest"
+	},
+	"repository": {
+        "type": "git",
+        "url": "git://github.com/clubajax/BYODG.git"
+    }
+}
