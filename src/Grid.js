@@ -61,10 +61,6 @@ define([
 			this.connectScroll();
 		},
 		
-		select: function(index, cell){
-			
-		},
-		
 		connectScroll: function(){
 			var self = this;
 			this.scrollHandle = on(this.container, 'scroll', function(event){
