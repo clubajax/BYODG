@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 5//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    <title>Test on</title>
+	<style>
+		html, body{
+			margin:10px;
+			padding:0;
+			background:#fff;
+			font-family: sans-serif;
+		}
+		#modal,
+		#mousewheeltest{
+			padding: 10px;
+			position: absolute;
+			right: 20px;
+			top: 50px;
+			width: 180px;
+			height: 180px;
+			border: 1px solid #666;
+		}
+		#modal{
+			right: 240px;
+		}
+	</style>
+
+    <script src="../src/on.js"></script>
+
+</head>
+<body>
+	<h1>on test</h1>
+	<p style='font-style: italic;'>Results are in the console.</p>
+	
+	<p>Test Key Events</p>
+	<input id='inp' />
+	
+    <p>Test simple connections</p>
+    <button id=b1>clicker</button>
+    <button id=b2>pause clicker</button>
+    <button id=b3>resume clicker</button>
+    <button id=b4>cancel clicker</button>
+
+    <p>Test multi connections</p>
+    <button id=m1>multi</button>
+    <button id=m2>pause multi</button>
+    <button id=m3>resume multi</button>
+    <button id=m4>cancel multi</button>
+
+    <p>Test context</p>
+    <button id=cb1>clicker</button>
+    <button id=cm1>multi</button>
+
+    <p>Test css selectors</p>
+    <div id=css>
+        <span class='tab'><a href='#' >Tab 1</a></span>
+        <span class='tab'><a href='#' >Tab 2</a></span>
+        <span class='tab'><a href='#' >Tab 3</a></span>
+    </div>
+	
+	<div id='mousewheeltest'>Test mousewheel</div>
+	
+	<div id='modal'>
+		Modal. Click in me, click out of me, mouse in and out of me.
+	</div>
+	
+	<script>
+			console.log('on loaded');
+			var
+				on = window.on,
+				h1, h2, o,
+				wheelNode = document.getElementById('mousewheeltest'),
+				modal = document.getElementById('modal');
+			
+			on(wheelNode, 'wheel', function(e){
+				wheelNode.innerHTML = 'delta: ' + e.delta.toFixed(2)+ '<br>wheelY: ' + e.wheelY.toFixed(2)+ '<br>wheelX: ' + e.wheelX.toFixed(2);
+			});
+			
+			on(modal, 'clickoff', function(){
+				modal.innerHTML = ('modal clickoff');	
+			});
+			on('modal', 'mouseenter', function(){
+				modal.innerHTML = ('modal enter');	
+			});
+			on('modal', 'mouseleave', function(){
+				modal.innerHTML = ('modal leave');	
+			});
+			
+			on('inp', 'keydown', function(e){
+				console.log('keydown', e.alphanumeric, e.keyCode, e);
+			});
+			on('inp', 'keyup', function(e){
+				console.log('keyup', e.alphanumeric, e.keyCode, e);
+			});
+			on('inp', 'keypress', function(e){
+				console.log('keypress', e.alphanumeric, e.keyCode, e);
+			});
+		
+			on('css', 'click .tab', function(e){
+				console.log('clicked tab');
+			});
+		
+		
+		
+		
+			h1 = on('b1', 'click', function(){
+				console.log('clicker');
+			});
+			on('b2', 'click', function(){
+				h1.pause();
+				console.log('pause!');
+			});
+			on('b3', 'click', function(){
+				h1.resume();
+				console.log('resume!');
+			});
+			on('b4', 'click', function(){
+				h1.remove();
+				console.log('remove!');
+			});
+		
+			h2 = on.multi('m1', {
+				'click': function(){ console.log('multi click'); },
+				'mousedown': function(){ console.log('multi down'); },
+				'mouseup': function(){ console.log('multi up'); }
+			});
+		
+			on('m2', 'click', function(){
+				h2.pause();
+				console.log('pause multi!');
+			});
+			on('m3', 'click', function(){
+				h2.resume();
+				console.log('resume multi!');
+			});
+			on('m4', 'click', function(){
+				h2.remove();
+				console.log('remove mutli!');
+			});
+		
+		
+		
+		
+			o = {
+				init: function(){
+					on('cb1', 'click', 'onClick', this);
+					on.multi('cm1', {
+						'click': 'onClick',
+						'mousedown': 'onDown',
+						'mouseup': 'onUp'
+					}, this);
+				},
+				onClick: function(evt){
+					console.log('context click',  evt);
+				},
+				onDown: function(evt){
+					console.log('context down',  evt);
+				},
+				onUp: function(evt){
+					console.log('context up',  evt);
+				}
+			};
+		
+			o.init();
+		
+		
+
+</script>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 5//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    <title>Test dom</title>
+	<style>
+		html, body{
+			margin:10px;
+			padding:0;
+			background:#fff;
+			font-family: sans-serif;
+		}
+		#test-box-size{
+			position: absolute;
+			top: 50px;
+			left: 250px;
+			width: 100px;
+			height: 25px;
+			margin: 0;
+			padding: 0;
+		}
+		
+	</style>
+
+    <script src="../src/dom.js"></script>
+
+</head>
+<body>
+	<h1>dom test</h1>
+	<p style='font-style: italic;'>Test results are in the console.</p>
+	<div id='test-box-size'></div>
+	<div class='query-me one'></div>
+	<div class='query-me two'></div>
+	<div id='test-node'></div>
+	
+	<script>
+		function assert(expr, msg){
+			var result = new Function( 'return ' + expr )();
+			if(result){
+				console.log(msg || expr, 'passed', result);
+			}else{
+				console.error('failed', expr || msg);
+			}
+			
+		}
+			var
+				dom = window.dom,
+				node,
+				testNode = dom.byId('test-node'),
+				suite;
+	
+	assert("dom.isNode(dom.byId('test-box-size'))", 'byId');
+	assert('JSON.stringify(dom.box(dom.byId(\'test-box-size\'))) === \'{"height":25,"width":100,"left":250,"bottom":75,"right":350,"top":50}\'', 'box');
+	
+	assert("dom.uid('test') === 'test-1'", 'uid 1');
+	assert("dom.uid('test') === 'test-2'", 'uid 2');
+	assert("dom.uid('test') === 'test-3'", 'uid 3');
+	
+	node = dom('<div>test string to dom</div>', 'test-node');
+	assert("dom.byId('test-node').innerHTML === '<div>test string to dom</div>'", 'toDom');
+	dom.clean(testNode);
+	
+	assert("testNode.innerHTML === ''", 'clean');
+	assert("dom.isNode(dom('div'))", 'dom simple');
+	assert("dom('div', {html:'foo'}).innerHTML==='foo'", 'dom html');
+	
+	dom('div', {html:'foo'}, 'test-node');
+	assert("testNode.innerHTML === '<div>foo</div>'", 'dom html');
+	dom.clean(testNode);
+	assert("testNode.innerHTML === ''", 'dom clean');
+	
+	dom('div', {id:'my-id', html:'foo', css:'myClass', style:{width:100}, attr:{'data-test':'test attribute'}}, 'test-node');
+	assert('testNode.innerHTML === \'<div class="myClass" id="my-id" data-test="test attribute" style="width: 100px;">foo</div>\'', 'attributes');
+	dom.clean(testNode);
+	
+	dom('div', {html:'one'}, testNode);
+	dom('div', {html:'two'}, testNode, true);
+	assert('testNode.innerHTML === \'<div>two</div><div>one</div>\'', 'prepend');
+	dom.clean(testNode);
+	
+	dom('div', {id:'to-destroy', html:'one!'}, testNode);
+	dom.destroy(dom.byId('to-destroy'));
+	assert("dom.byId('to-destroy')===null", 'destroy');
+	assert("testNode.innerHTML === ''", 'destroy');
+	
+	dom.clean(testNode);
+	dom('div', {html:'one'}, testNode);
+	dom('div', {html:'two'}, testNode, true);
+	dom.clean(testNode);
+	assert("testNode.innerHTML === ''", 'dom clean multiple children');
+	
+	node = dom('div', {css:'foo bar'});
+	assert("dom.classList.contains(node, 'foo')", 'classList.contains');
+	assert("dom.classList.contains(node, 'bar')", 'classList.contains');
+	dom.classList.remove(node, 'foo bar');
+	assert("!dom.classList.contains(node, 'foo')", 'classList.remove');
+	assert("!dom.classList.contains(node, 'bar')", 'classList.remove');
+	dom.classList.add(node, 'bop lop');
+	assert("dom.classList.contains(node, 'bop')", 'classList.add');
+	assert("dom.classList.contains(node, 'lop')", 'classList.add');
+	dom.classList.toggle(node, 'bop');
+	assert("!dom.classList.contains(node, 'bop')", 'classList.toggle');
+	dom.classList.toggle(node, 'bop');
+	assert("dom.classList.contains(node, 'bop')", 'classList.toggle');
+	
+	assert(dom.isNode(dom.query('.query-me.one')), 'query one node');
+	assert(Array.isArray(dom.query('.query-me')), 'query two nodes');
+	
+	
+</script>
+</html>

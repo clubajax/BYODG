@@ -2,26 +2,92 @@
 <html lang="en">
 <head>
     <title>grid</title>
-	<script src='../../tools/requirejs.js'></script>
-	<script src='../../randomizer/rand.js'></script>
+	<link href='../src/grid.css' rel='stylesheet' />
+	<style>
+		html{
+			height: 100%;
+		}
+		body{
+			font-family: sans-serif;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		.page{
+			padding: 20px;
+			overflow: hidden;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			height: auto;
+			width: auto;
+		}
+		h1{
+			padding: 0;
+			margin: 0;
+			margin-bottom: 20px;
+		}
+		#grid{
+			position: relative;
+			width: 99%;
+			height: 70%;
+			border: 1px solid #333;
+		}
+	</style>
+	<script src='../node_modules/requirejs/require.js'></script>
 	<script>
 		requirejs.config({
 			baseUrl:'.',
 			paths:{
 				grid:'../src',
-				declare: '../../declare/src/declare',
-				dom: '../../dom/src/dom'
+				declare: '../node_modules/declare/src/declare',
+				dom: '../node_modules/dom/src/dom',
+				on: '../node_modules/on/src/on',
+				EventTree: '../node_modules/EventTree/src/EventTree'
 			}
 		});
 	</script>
 </head>
 <body>
-    <h1>grid</h1>
-	<div id='grid'></div>
-	<script>
-		require(['./TestGrid'], function(TestGrid){
-			new TestGrid('grid');
-		});
-	</script>
+	<div class='page'>
+		<h1>grid</h1>
+		<div id='grid'></div>
+		<script>
+			// Sort
+			// Pagination
+			// Editable (double click)
+			// Draggable columns
+			
+			require(['./TestGrid'], function(TestGrid){
+				var
+					options = {
+						start: 0,
+						count: 10,
+						sort: 'firstName',
+						dir: 'desc'
+						//filter:'firstName,lastName,birthday'
+					},
+					grid = new TestGrid(options, 'grid');
+					
+				if(grid.on){
+					grid.on('data', function(data){
+						console.log('data', data);
+						//console.table(data);
+					});
+					grid.on('render', function(grid){
+						console.log('grid', grid);
+					});
+					grid.on('select-row', function(event){
+						console.log('select-row', event);
+					});
+					grid.on('header-click', function(event){
+						console.log('header-click', event);
+					});
+				}
+			});
+		</script>
+	</div>
 </body>
 </html>
