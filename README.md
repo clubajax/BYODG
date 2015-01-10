@@ -45,7 +45,7 @@ programming. It should be plugable, or extendable - some way of separating funct
 * Display too much data
  * Infinite scrolling is stupid. Give your users a better way to find their data.
 * Column resize
- * Maybe you do want this, but resizing doesn't always work with stretchy columns, dynamic columns, or a stretchy grid. Picj your poison.
+ * Maybe you do want this, but resizing doesn't always work with stretchy columns, dynamic columns, or a stretchy grid. Pick your poison.
 * Inherit from 50 sub classes
  * Not all libraries do best practices. BYODG practices composition: features are instances, not inherited.
 * About a million other things.
